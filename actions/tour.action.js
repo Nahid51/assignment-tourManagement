@@ -5,8 +5,10 @@ export const addNewTourAction = async (data) => {
     return result;
 };
 
-export const getAllTourAction = async (data) => {
-    const result = await tourModel.find(data);
+export const getAllTourAction = async (filters, queries) => {
+    const result = await tourModel.find(filters)
+        .select(queries.fields)
+        .sort(queries.sortBy);
     return result;
 };
 

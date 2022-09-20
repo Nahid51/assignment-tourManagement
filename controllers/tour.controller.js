@@ -20,7 +20,28 @@ export const addNewTour = async (req, res) => {
 export const getAllTour = async (req, res) => {
 
     try {
-        const result = await getAllTourAction(req.query);
+        let filters = { ...req.query };
+        const excludeFields = ['sort', 'page', 'limit'];
+        excludeFields.forEach(field => delete filters[field]);
+
+        let filtersString = JSON.stringify(filters);
+        filtersString = filtersString.replace(/\b(eq|gt|gte|lt|lte|ne)\b/g, match => `$${match}`);
+
+        filters = JSON.parse(filtersString);
+
+        const queries = {};
+
+        if (req.query.sort) {
+            const sortBy = req.query.sort.split(',').join(' ');
+            queries.sortBy = sortBy
+        }
+        if (req.query.fields) {
+            const fields = req.query.fields.split(',').join(' ');
+            queries.fields = fields
+        }
+
+        const result = await getAllTourAction(filters, queries);
+
         res.status(200).json({
             message: "All tours have been found successfully!",
             result: result
