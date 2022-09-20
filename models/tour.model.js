@@ -6,6 +6,7 @@ const tourSchema = mongoose.Schema({
     price: { type: Number, require: true },
     time: { type: String, require: true },
     desc: { type: String, require: true },
+    viewCount: { type: Number, default: 0 },
     createdAt: {
         type: Date,
         default: new Date()

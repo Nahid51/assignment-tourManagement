@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { addNewTourAction, getAllTourAction, getSingleTourByIdAction, updateSingleTourByIdAction } from "../actions/tour.action.js";
+import { addNewTourAction, getAllTourAction, getSingleTourByIdAction, getTopChepestTourAction, getTopViewdTourAction, updateSingleTourByIdAction } from "../actions/tour.action.js";
 
 export const addNewTour = async (req, res) => {
     try {
@@ -77,21 +77,32 @@ export const updateSingleTourById = async (req, res) => {
 
 export const getTopViewdTour = async (req, res) => {
     try {
+        const result = await getTopViewdTourAction();
+        res.status(200).json({
+            message: "Find top viewed tour successfully!",
+            result: result
+        });
 
     } catch (error) {
         res.status(404).json({
-            message: "Tour not added!",
+            message: "Top viewed tour not founded!",
             error: error.message
         });
     }
-}
+};
+
 export const getTopChepestTour = async (req, res) => {
     try {
+        const result = await getTopChepestTourAction();
+        res.status(200).json({
+            message: "Find top cheapest tour successfully!",
+            result: result
+        });
 
     } catch (error) {
         res.status(404).json({
-            message: "Tour not added!",
+            message: "Top cheapest tour not founded!",
             error: error.message
         });
     }
-}
+};
