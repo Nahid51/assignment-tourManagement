@@ -5,8 +5,8 @@ export const addNewTourAction = async (data) => {
     return result;
 };
 
-export const getAllTourAction = async () => {
-    const result = await tourModel.find();
+export const getAllTourAction = async (data) => {
+    const result = await tourModel.find(data);
     return result;
 };
 

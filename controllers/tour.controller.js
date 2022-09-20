@@ -18,8 +18,9 @@ export const addNewTour = async (req, res) => {
 };
 
 export const getAllTour = async (req, res) => {
+
     try {
-        const result = await getAllTourAction();
+        const result = await getAllTourAction(req.query);
         res.status(200).json({
             message: "All tours have been found successfully!",
             result: result
