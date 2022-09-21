@@ -1,15 +1,20 @@
 import tourModel from "../models/tour.model.js";
 
 export const addNewTourAction = async (data) => {
-    const result = await tourModel.create(data);
-    return result;
+    const newTour = await tourModel.create(data);
+    return newTour;
 };
 
 export const getAllTourAction = async (filters, queries) => {
-    const result = await tourModel.find(filters)
+    const allTour = await tourModel.find(filters)
+        .skip(queries.skip)
+        .limit(queries.limit)
         .select(queries.fields)
         .sort(queries.sortBy);
-    return result;
+
+    const totalTours = await tourModel.countDocuments(filters);
+    const pageCount = Math.ceil(totalTours / queries.limit);
+    return { totalTours, pageCount, allTour };
 };
 
 export const getSingleTourByIdAction = async (id) => {
@@ -17,21 +22,21 @@ export const getSingleTourByIdAction = async (id) => {
     const findViewCount = await tourModel.findById(id);
     let count = findViewCount?.viewCount + 1;
 
-    const result = await tourModel.findByIdAndUpdate(id, { viewCount: count })
-    return result;
+    const singleTour = await tourModel.findByIdAndUpdate(id, { viewCount: count })
+    return singleTour;
 };
 
 export const updateSingleTourByIdAction = async (id, data) => {
-    const result = await tourModel.findByIdAndUpdate(id, data, { new: true });
-    return result;
+    const updateTour = await tourModel.findByIdAndUpdate(id, data, { new: true });
+    return updateTour;
 };
 
 export const getTopViewdTourAction = async () => {
-    const result = await tourModel.find().sort([['viewCount', 'descending']]).limit(3);
-    return result;
+    const topViewed = await tourModel.find().sort([['viewCount', 'descending']]).limit(3);
+    return topViewed;
 
 }
 export const getTopChepestTourAction = async () => {
-    const result = await tourModel.find().sort([['viewCount', 'ascending']]).limit(3);
-    return result;
+    const cheapViewed = await tourModel.find().sort([['viewCount', 'ascending']]).limit(3);
+    return cheapViewed;
 }

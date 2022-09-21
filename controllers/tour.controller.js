@@ -40,6 +40,13 @@ export const getAllTour = async (req, res) => {
             queries.fields = fields
         }
 
+        if (req.query.page) {
+            const { page = 1, limit = 5 } = req.query;
+            const skip = (page - 1) * Number(limit);
+            queries.skip = skip;
+            queries.limit = Number(limit);
+        }
+
         const result = await getAllTourAction(filters, queries);
 
         res.status(200).json({
